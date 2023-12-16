@@ -1,0 +1,23 @@
+.button {
+    @apply cursor-pointer 
+      w-16 h-16 text-2xl p-2
+      sm:w-12 sm:h-12 sm:text-xl
+      justify-self-center rounded-full
+       flex items-center justify-center 
+       border-2 
+  
+       border-gray-600
+       active:bg-gray-600
+       md:hover:bg-gray-600
+       
+       text-gray-600
+       md:hover:text-gray-300
+       active:text-gray-300
+  
+       transition-colors duration-300 ease-in-out;
+  
+    &:disabled {
+      @apply cursor-not-allowed;
+    }
+  }
+  

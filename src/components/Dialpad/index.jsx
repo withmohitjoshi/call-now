@@ -1,21 +1,57 @@
-import React, { useState } from 'react';
-import { FiPhone } from 'react-icons/fi';
+import React, { useCallback, useState } from "react";
+import { FiDelete, FiPhone } from "react-icons/fi";
+import CountryFlag from "../CountryFlag";
+import "./dialpad.scss";
+import Button from "../Button";
+
+const VALID_NUMBER_REGEX = /^[0-9*#]+$/g;
 
 const Dialpad = () => {
-  const [number, setNumber] = useState('');
+  const [number, setNumber] = useState("");
+
+  const handleOnChange = useCallback((e) => {
+    if (e.target.value && !e.target.value.match(VALID_NUMBER_REGEX)) {
+      e.preventDefault();
+      return;
+    }
+    setNumber(e.target.value);
+  }, []);
+
+  const handleSetNumber = useCallback((e) => {
+    if (number.length <= 13) setNumber((prev) => prev + e.target.innerText);
+  }, []);
+
   return (
-    <div className='w-full flex flex-col gap-4'>
-      <input type='text' value={number} onChange={(e) => setNumber(e.target.value)} className='p-2 h-12 text-center font-semibold text-gray-800' placeholder='+1234567890' max={13} min={3} />
-      <div className='grid grid-cols-3 grid-rows-4 gap-4'>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9, '*', 0, '#'].map((digit) => (
-          <Button key={digit} onClick={(e) => setNumber((prev) => prev + e.target.innerText)}>
+    <div className="w-full flex flex-col font-semibol gap-12">
+      <div className="flex gap-2 justify-center items-center">
+        <div className="w-12">{number && <CountryFlag number={number} />}</div>
+        <input
+          type="text"
+          value={number}
+          onChange={handleOnChange}
+          className="dialpad-input"
+          placeholder="+1234567890"
+          maxLength={13}
+        />
+        <div className="text-gray-600 w-12">
+          {number && (
+            <FiDelete onClick={() => setNumber((prev) => prev.slice(0, -1))} />
+          )}
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-y-4 sm:gap-y-8">
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, "*", 0, "#"].map((digit) => (
+          <Button
+            key={digit}
+            onClick={handleSetNumber}
+            disabled={number.length === 13}
+          >
             {digit}
           </Button>
         ))}
-        <Button classNames={'col-span-3'}
-          onClick={() => {
-            console.log('HElo world');
-          }}
+        <Button
+          className="col-span-3 border-green-700 text-green-700 hover:bg-green-700"
+          onClick={() => console.log("HElo world")}
         >
           <FiPhone />
         </Button>
@@ -25,15 +61,3 @@ const Dialpad = () => {
 };
 
 export default Dialpad;
-
-const Button = ({ children, classNames, onClick }) => {
-  return (
-    <div
-      onClick={onClick}
-      className={`cursor-pointer w-12 h-12 flex items-center justify-center border-2 border-purple-700 text-gray-800 justify-self-center font-semibold rounded-full p-2
-        hover:bg-purple-700 hover:text-gray-300 transition-colors duration-200 ease-in-out ${classNames}`}
-    >
-      {children}
-    </div>
-  );
-};
