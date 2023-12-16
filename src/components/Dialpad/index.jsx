@@ -22,24 +22,27 @@ const Dialpad = () => {
   }, []);
 
   return (
-    <div className="w-full flex flex-col font-semibol gap-12">
-      <div className="flex gap-2 justify-center items-center">
+    <div className="w-full h-full flex flex-col font-semibol justify-evenly">
+      <div className="flex gap-2 justify-center items-center mx-8">
         <div className="w-12">{number && <CountryFlag number={number} />}</div>
         <input
           type="text"
           value={number}
           onChange={handleOnChange}
-          className="dialpad-input"
+          className="dialpad-input grow"
           placeholder="+1234567890"
           maxLength={13}
         />
         <div className="text-gray-600 w-12">
           {number && (
-            <FiDelete onClick={() => setNumber((prev) => prev.slice(0, -1))} />
+            <FiDelete
+              className="mx-auto"
+              onClick={() => setNumber((prev) => prev.slice(0, -1))}
+            />
           )}
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-y-4 sm:gap-y-8">
+      <div className="grid grid-cols-3 gap-y-4">
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, "*", 0, "#"].map((digit) => (
           <Button
             key={digit}
@@ -49,10 +52,7 @@ const Dialpad = () => {
             {digit}
           </Button>
         ))}
-        <Button
-          className="col-span-3 border-green-700 text-green-700 hover:bg-green-700"
-          onClick={() => console.log("HElo world")}
-        >
+        <Button className="col-span-3 border-green-700 text-green-700 hover:bg-green-700">
           <FiPhone />
         </Button>
       </div>
